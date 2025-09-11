@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: El Marco de Trabajo Scrum</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .infographic {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="3" fill="white" opacity="0.05"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.1"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50px) translateY(-50px); }
+            100% { transform: translateX(50px) translateY(50px); }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #3498db;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: #e74c3c;
+            border-radius: 2px;
+        }
+
+        .intro-content {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 6px solid #3498db;
+        }
+
+        .intro-content p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .pillar {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .pillar:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .pillar:nth-child(1) { border-top-color: #e74c3c; }
+        .pillar:nth-child(2) { border-top-color: #f39c12; }
+        .pillar:nth-child(3) { border-top-color: #27ae60; }
+
+        .pillar h4 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+
+        .pillar p {
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #3498db, #2c3e50);
+        }
+
+        .role-card:hover {
+            border-color: #3498db;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(52, 152, 219, 0.2);
+        }
+
+        .role-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .role-mission {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+        }
+
+        .role-mission strong {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .role-responsibilities {
+            color: #34495e;
+        }
+
+        .role-responsibilities strong {
+            color: #27ae60;
+        }
+
+        .events-timeline {
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #3498db, #e74c3c);
+            border-radius: 2px;
+        }
+
+        .event-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 80px;
+        }
+
+        .event-dot {
+            position: absolute;
+            left: 18px;
+            width: 28px;
+            height: 28px;
+            background: white;
+            border: 4px solid #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #3498db;
+            font-size: 0.9em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateX(5px);
+        }
+
+        .event-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .event-when {
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .event-purpose {
+            color: #27ae60;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .event-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .artifacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .artifact-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .artifact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            border-bottom-left-radius: 100%;
+            opacity: 0.1;
+        }
+
+        .artifact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        .artifact-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .artifact-description {
+            color: #34495e;
+            line-height: 1.6;
+        }
+
+        .sprint-cycle {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sprint-cycle::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cycle-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .cycle-description {
+            font-size: 1.1em;
+            color: #34495e;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .footer h3 {
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .section-title {
+                font-size: 1.8em;
+            }
+            
+            .roles-grid,
+            .artifacts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-item {
+                padding-left: 60px;
+            }
+            
+            .timeline-line {
+                left: 20px;
+            }
+            
+            .event-dot {
+                left: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <!-- Header -->
+        <header class="header">
+            <h1>El Marco de Trabajo Scrum</h1>
+            <p class="subtitle">Entrega valor de forma ágil, iterativa y colaborativa</p>
+        </header>
+
+        <div class="content">
+            <!-- Sección 1: ¿Qué es Scrum? -->
+            <section class="section">
+                <h2 class="section-title">1. ¿Qué es Scrum?</h2>
+                <div class="intro-content">
+                    <p>Es un marco de trabajo ágil que ayuda a los equipos a entregar valor a los clientes de forma más rápida y eficiente. Se enfoca en la entrega incremental y la mejora continua a través de ciclos cortos de trabajo llamados Sprints.</p>
+                    
+                    <div class="sprint-cycle">
+                        <h3 class="cycle-title">🔄 Ciclo Iterativo</h3>
+                        <p class="cycle-description">Trabajo en ciclos de 2-4 semanas que permiten adaptación constante y entrega de valor continuo</p>
+                    </div>
+                    
+                    <h4 style="font-size: 1.4em; color: #2c3e50; margin: 25px 0 15px 0;">Pilares de Scrum:</h4>
+                    <div class="pillars">
+                        <div class="pillar">
+                            <h4>🔍 Transparencia</h4>
+                            <p>Todo el proceso y el trabajo deben ser visibles para todos los involucrados.</p>
+                        </div>
+                        <div class="pillar">
+                            <h4>🔎 Inspección</h4>
+                            <p>Los aspectos del proceso deben ser revisados frecuentemente para detectar desviaciones.</p>
+                        </div>
+                        <div class="pillar">
+                            <h4>⚡ Adaptación</h4>
+                            <p>Si se detectan problemas, se deben hacer ajustes lo antes posible.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 2: Los Roles -->
+            <section class="section">
+                <h2 class="section-title">2. Los Roles del Equipo Scrum</h2>
+                <div class="roles-grid">
+                    <div class="role-card">
+                        <h3 class="role-title">👤 Product Owner (Dueño del Producto)</h3>
+                        <div class="role-mission">
+                            <strong>Misión:</strong> Maximizar el valor del producto.
+                        </div>
+                        <div class="role-responsibilities">
+                            <strong>Responsabilidades:</strong> Define los objetivos, gestiona y prioriza la lista de tareas (Product Backlog). Es la voz del cliente.
+                        </div>
+                    </div>
+                    
+                    <div class="role-card">
+                        <h3 class="role-title">🎯 Scrum Master (Líder Facilitador)</h3>
+                        <div class="role-mission">
+                            <strong>Misión:</strong> Asegurar que el equipo siga los principios y prácticas de Scrum.
+                        </div>
+                        <div class="role-responsibilities">
+                            <strong>Responsabilidades:</strong> Elimina obstáculos, facilita los eventos y protege al equipo de interrupciones. No es un jefe, es un coach.
+                        </div>
+                    </div>
+                    
+                    <div class="role-card">
+                        <h3 class="role-title">👥 Developers (El Equipo de Desarrollo)</h3>
+                        <div class="role-mission">
+                            <strong>Misión:</strong> Entregar un incremento de producto "terminado" y de alta calidad en cada Sprint.
+                        </div>
+                        <div class="role-responsibilities">
+                            <strong>Responsabilidades:</strong> Son los expertos que construyen el producto. Son auto-organizados y multifuncionales.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 3: Los Eventos -->
+            <section class="section">
+                <h2 class="section-title">3. Los Eventos de Scrum (Ceremonias)</h2>
+                <div class="events-timeline">
+                    <div class="timeline-line"></div>
+                    
+                    <div class="event-item">
+                        <div class="event-dot">🚀</div>
+                        <div class="event-card">
+                            <h3 class="event-title">El Sprint</h3>
+                            <div class="event-description">
+                                Un ciclo de trabajo de duración fija (generalmente 2-4 semanas) donde el equipo convierte ideas en valor. Todos los demás eventos ocurren dentro del Sprint.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="event-item">
+                        <div class="event-dot">📋</div>
+                        <div class="event-card">
+                            <h3 class="event-title">Sprint Planning (Planificación del Sprint)</h3>
+                            <p class="event-when">¿Cuándo? Al inicio del Sprint.</p>
+                            <p class="event-purpose">¿Propósito? El equipo completo define qué trabajo se puede hacer y cómo se hará.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="event-item">
+                        <div class="event-dot">☀️</div>
+                        <div class="event-card">
+                            <h3 class="event-title">Daily Scrum (Reunión Diaria)</h3>
+                            <p class="event-when">¿Cuándo? Todos los días (15 minutos máximo).</p>
+                            <p class="event-purpose">¿Propósito? Sincronizar al equipo, revisar el progreso hacia el objetivo y planificar las próximas 24 horas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="event-item">
+                        <div class="event-dot">👁️</div>
+                        <div class="event-card">
+                            <h3 class="event-title">Sprint Review (Revisión del Sprint)</h3>
+                            <p class="event-when">¿Cuándo? Al final del Sprint.</p>
+                            <p class="event-purpose">¿Propósito? El equipo muestra el trabajo "terminado" a los interesados (stakeholders) para recibir retroalimentación.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="event-item">
+                        <div class="event-dot">🔄</div>
+                        <div class="event-card">
+                            <h3 class="event-title">Sprint Retrospective (Retrospectiva del Sprint)</h3>
+                            <p class="event-when">¿Cuándo? Después de la Review y antes de la siguiente Planning.</p>
+                            <p class="event-purpose">¿Propósito? El equipo reflexiona sobre el Sprint pasado para identificar qué salió bien, qué no, y cómo mejorar en el siguiente ciclo.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección 4: Los Artefactos -->
+            <section class="section">
+                <h2 class="section-title">4. Los Artefactos de Scrum</h2>
+                <div class="artifacts-grid">
+                    <div class="artifact-card">
+                        <h3 class="artifact-title">📝 Product Backlog (Lista de Producto)</h3>
+                        <div class="artifact-description">
+                            Es la lista única y priorizada de todo lo que se desea para el producto. Es un documento vivo que evoluciona constantemente.
+                        </div>
+                    </div>
+                    
+                    <div class="artifact-card">
+                        <h3 class="artifact-title">📋 Sprint Backlog (Lista del Sprint)</h3>
+                        <div class="artifact-description">
+                            Es el conjunto de tareas del Product Backlog que el equipo se compromete a completar durante un Sprint. Incluye el plan para lograrlo.
+                        </div>
+                    </div>
+                    
+                    <div class="artifact-card">
+                        <h3 class="artifact-title">📦 Incremento de Producto</h3>
+                        <div class="artifact-description">
+                            Es la suma de todo el trabajo completado durante un Sprint, más el valor de los Sprints anteriores. Debe ser utilizable y potencialmente entregable.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <h3>🎯 Scrum en Acción</h3>
+            <p>Un marco de trabajo que transforma equipos y acelera la entrega de valor</p>
+        </footer>
+    </div>
+</body>
+</html>
