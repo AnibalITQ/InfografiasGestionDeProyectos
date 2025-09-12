@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental CMMI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(ellipse at center, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: auto;
+        }
+
+        .mind-map {
+            position: relative;
+            width: 1200px;
+            height: 800px;
+            max-width: 100%;
+        }
+
+        /* Nodo central */
+        .central-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(231, 76, 60, 0.4);
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .central-node:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 20px 45px rgba(231, 76, 60, 0.6);
+        }
+
+        .central-node h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .central-node p {
+            font-size: 0.8em;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Nodos principales */
+        .main-node {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+        }
+
+        .main-node:hover {
+            transform: scale(1.1);
+            z-index: 15;
+        }
+
+        .main-node h3 {
+            font-size: 1.1em;
+            margin-bottom: 3px;
+        }
+
+        .main-node p {
+            font-size: 0.7em;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Posicionamiento de nodos principales */
+        .node-1 { top: 10%; left: 15%; background: linear-gradient(135deg, #3498db, #2980b9); }
+        .node-2 { top: 5%; right: 15%; background: linear-gradient(135deg, #27ae60, #229954); }
+        .node-3 { top: 40%; right: 5%; background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .node-4 { bottom: 5%; right: 15%; background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .node-5 { bottom: 10%; left: 15%; background: linear-gradient(135deg, #34495e, #2c3e50); }
+        .node-6 { top: 40%; left: 5%; background: linear-gradient(135deg, #e67e22, #d35400); }
+
+        /* Sub-nodos */
+        .sub-node {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background: white;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: 500;
+            color: #2c3e50;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 3px solid;
+            padding: 0 10px;
+        }
+
+        .sub-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Sub-nodos para cada nodo principal */
+        .sub-1-1 { top: 8%; left: 25%; border-color: #3498db; }
+        .sub-1-2 { top: 15%; left: 32%; border-color: #3498db; }
+
+        .sub-2-1 { top: 3%; right: 5%; border-color: #27ae60; }
+        .sub-2-2 { top: 10%; right: 28%; border-color: #27ae60; }
+        .sub-2-3 { top: 18%; right: 22%; border-color: #27ae60; }
+        .sub-2-4 { top: 25%; right: 30%; border-color: #27ae60; }
+        .sub-2-5 { top: 33%; right: 25%; border-color: #27ae60; }
+
+        .sub-3-1 { top: 32%; right: 15%; border-color: #f39c12; }
+        .sub-3-2 { top: 48%; right: 15%; border-color: #f39c12; }
+
+        .sub-4-1 { bottom: 15%; right: 5%; border-color: #9b59b6; }
+        .sub-4-2 { bottom: 8%; right: 28%; border-color: #9b59b6; }
+
+        .sub-5-1 { bottom: 20%; left: 5%; border-color: #34495e; }
+        .sub-5-2 { bottom: 15%; left: 28%; border-color: #34495e; }
+        .sub-5-3 { bottom: 22%; left: 32%; border-color: #34495e; }
+
+        .sub-6-1 { top: 32%; left: 15%; border-color: #e67e22; }
+        .sub-6-2 { top: 48%; left: 15%; border-color: #e67e22; }
+
+        /* Líneas conectoras */
+        .connector {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            z-index: 1;
+        }
+
+        /* Líneas principales (del centro a nodos principales) */
+        .line-1 { width: 160px; height: 4px; top: 35%; left: 32%; transform: rotate(-35deg); }
+        .line-2 { width: 180px; height: 4px; top: 28%; left: 55%; transform: rotate(25deg); }
+        .line-3 { width: 140px; height: 4px; top: 48%; left: 60%; transform: rotate(90deg); }
+        .line-4 { width: 180px; height: 4px; top: 60%; left: 55%; transform: rotate(-25deg); }
+        .line-5 { width: 160px; height: 4px; top: 65%; left: 32%; transform: rotate(35deg); }
+        .line-6 { width: 140px; height: 4px; top: 48%; left: 35%; transform: rotate(-90deg); }
+
+        /* Líneas secundarias (de nodos principales a sub-nodos) */
+        .sub-line {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 1px;
+            z-index: 2;
+        }
+
+        .sub-line-1-1 { width: 60px; top: 18%; left: 18%; transform: rotate(-30deg); }
+        .sub-line-1-2 { width: 60px; top: 28%; left: 18%; transform: rotate(30deg); }
+
+        .sub-line-2-1 { width: 40px; top: 10%; left: 40%; transform: rotate(-45deg); }
+        .sub-line-2-2 { width: 40px; top: 10%; left: 47%; transform: rotate(-20deg); }
+        .sub-line-2-3 { width: 40px; top: 10%; left: 54%; transform: rotate(0deg); }
+        .sub-line-2-4 { width: 40px; top: 10%; right: 40%; transform: rotate(20deg); }
+        .sub-line-2-5 { width: 40px; top: 10%; right: 27%; transform: rotate(45deg); }
+
+        .sub-line-3-1 { width: 60px; top: 18%; right: 18%; transform: rotate(30deg); }
+        .sub-line-3-2 { width: 60px; top: 28%; right: 18%; transform: rotate(-30deg); }
+
+        .sub-line-4-1 { width: 60px; bottom: 18%; right: 18%; transform: rotate(-30deg); }
+        .sub-line-4-2 { width: 60px; bottom: 28%; right: 18%; transform: rotate(30deg); }
+
+        .sub-line-5-1 { width: 40px; bottom: 10%; left: 40%; transform: rotate(45deg); }
+        .sub-line-5-2 { width: 40px; bottom: 10%; left: 47%; transform: rotate(20deg); }
+        .sub-line-5-3 { width: 40px; bottom: 10%; right: 40%; transform: rotate(-45deg); }
+
+        .sub-line-6-1 { width: 60px; bottom: 18%; left: 18%; transform: rotate(-30deg); }
+        .sub-line-6-2 { width: 60px; bottom: 28%; left: 18%; transform: rotate(30deg); }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .mind-map {
+                width: 100%;
+                height: 600px;
+                transform: scale(0.8);
+                transform-origin: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mind-map {
+                transform: scale(0.6);
+                height: 500px;
+            }
+        }
+
+        /* Animación de aparición */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .central-node, .main-node, .sub-node {
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        .main-node { animation-delay: 0.2s; }
+        .sub-node { animation-delay: 0.4s; }
+        .connector, .sub-line { animation-delay: 0.6s; }
+
+        @keyframes drawLine {
+            from {
+                transform: scaleX(0);
+            }
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        .connector, .sub-line {
+            animation: drawLine 1s ease-out;
+            transform-origin: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="mind-map">
+        <!-- Líneas conectoras principales -->
+        <div class="connector line-1"></div>
+        <div class="connector line-2"></div>
+        <div class="connector line-3"></div>
+        <div class="connector line-4"></div>
+        <div class="connector line-5"></div>
+        <div class="connector line-6"></div>
+
+        <!-- Líneas secundarias -->
+        <div class="sub-line sub-line-1-1"></div>
+        <div class="sub-line sub-line-1-2"></div>
+        <div class="sub-line sub-line-2-1"></div>
+        <div class="sub-line sub-line-2-2"></div>
+        <div class="sub-line sub-line-2-3"></div>
+        <div class="sub-line sub-line-2-4"></div>
+        <div class="sub-line sub-line-2-5"></div>
+        <div class="sub-line sub-line-3-1"></div>
+        <div class="sub-line sub-line-3-2"></div>
+        <div class="sub-line sub-line-4-1"></div>
+        <div class="sub-line sub-line-4-2"></div>
+        <div class="sub-line sub-line-5-1"></div>
+        <div class="sub-line sub-line-5-2"></div>
+        <div class="sub-line sub-line-5-3"></div>
+        <div class="sub-line sub-line-6-1"></div>
+        <div class="sub-line sub-line-6-2"></div>
+
+        <!-- Nodo central -->
+        <div class="central-node" data-tooltip="Capability Maturity Model Integration - Marco para mejorar procesos organizacionales">
+            <h1>CMMI</h1>
+            <p>v2.0</p>
+        </div>
+
+        <!-- Nodos principales -->
+        <div class="main-node node-1" data-tooltip="¿Qué es CMMI? - Modelo de madurez de capacidades">
+            <h3>¿Qué es?</h3>
+            <p>Modelo de Madurez</p>
+        </div>
+
+        <div class="main-node node-2" data-tooltip="5 Niveles de Madurez - Del caos a la optimización">
+            <h3>Niveles</h3>
+            <p>5 Grados</p>
+        </div>
+
+        <div class="main-node node-3" data-tooltip="Áreas de Proceso - Dominios clave de mejora">
+            <h3>Áreas de Proceso</h3>
+            <p>Dominios Clave</p>
+        </div>
+
+        <div class="main-node node-4" data-tooltip="Tipos de Representación - Escalonada vs Continua">
+            <h3>Representación</h3>
+            <p>Escalonada/Continua</p>
+        </div>
+
+        <div class="main-node node-5" data-tooltip="Beneficios de CMMI - Mejoras organizacionales">
+            <h3>Beneficios</h3>
+            <p>Mejoras Clave</p>
+        </div>
+
+        <div class="main-node node-6" data-tooltip="Implementación de CMMI - Pasos y consideraciones">
+            <h3>Implementación</h3>
+            <p>Proceso</p>
+        </div>
+
+        <!-- Sub-nodos -->
+        <div class="sub-node sub-1-1" data-tooltip="Framework desarrollado por Carnegie Mellon University">Marco de Trabajo</div>
+        <div class="sub-node sub-1-2" data-tooltip="Mejora continua de procesos organizacionales">Mejora de Procesos</div>
+
+        <div class="sub-node sub-2-1" data-tooltip="Nivel 1: Procesos impredecibles y reactivos">1. Inicial</div>
+        <div class="sub-node sub-2-2" data-tooltip="Nivel 2: Procesos caracterizados para proyectos">2. Gestionado</div>
+        <div class="sub-node sub-2-3" data-tooltip="Nivel 3: Procesos caracterizados para la organización">3. Definido</div>
+        <div class="sub-node sub-2-4" data-tooltip="Nivel 4: Procesos medidos y controlados">4. Cuantitativamente Gestionado</div>
+        <div class="sub-node sub-2-5" data-tooltip="Nivel 5: Enfoque en mejora continua">5. Optimizado</div>
+
+        <div class="sub-node sub-3-1" data-tooltip="Desarrollo y mantenimiento de productos">Desarrollo</div>
+        <div class="sub-node sub-3-2" data-tooltip="Adquisición y servicios">Servicios</div>
+
+        <div class="sub-node sub-4-1" data-tooltip="Progresión nivel por nivel">Escalonada</div>
+        <div class="sub-node sub-4-2" data-tooltip="Mejora por áreas específicas">Continua</div>
+
+        <div class="sub-node sub-5-1" data-tooltip="Mayor calidad en productos y servicios">Calidad</div>
+        <div class="sub-node sub-5-2" data-tooltip="Reducción de costos operativos">Costos</div>
+        <div class="sub-node sub-5-3" data-tooltip="Cumplimiento de cronogramas">Predictibilidad</div>
+
+        <div class="sub-node sub-6-1" data-tooltip="Evaluación del estado actual">Evaluación</div>
+        <div class="sub-node sub-6-2" data-tooltip="Plan de mejora organizacional">Plan de Mejora</div>
+
+        <!-- Tooltip -->
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <script>
+        // Funcionalidad de tooltip
+        const nodes = document.querySelectorAll('[data-tooltip]');
+        const tooltip = document.getElementById('tooltip');
+
+        nodes.forEach(node => {
+            node.addEventListener('mouseenter', (e) => {
+                const tooltipText = e.target.getAttribute('data-tooltip');
+                tooltip.textContent = tooltipText;
+                tooltip.style.opacity = '1';
+                
+                const rect = e.target.getBoundingClientRect();
+                tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+                tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+            });
+
+            node.addEventListener('mouseleave', () => {
+                tooltip.style.opacity = '0';
+            });
+        });
+
+        // Efecto de pulsación en el nodo central
+        const centralNode = document.querySelector('.central-node');
+        setInterval(() => {
+            centralNode.style.transform = 'translate(-50%, -50%) scale(1.05)';
+            setTimeout(() => {
+                centralNode.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 200);
+        }, 3000);
+    </script>
+</body>
+</html>
