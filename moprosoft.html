@@ -193,11 +193,12 @@
         /* Líneas conectoras */
         .connection-line {
             position: absolute;
-            background: rgba(52, 152, 219, 0.3);
-            height: 2px;
-            border-radius: 1px;
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.6), rgba(52, 152, 219, 0.2));
+            height: 3px;
+            border-radius: 2px;
             z-index: 3;
             animation: drawLine 2s ease-out;
+            box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
         }
 
         @keyframes drawLine {
@@ -205,21 +206,33 @@
             to { opacity: 1; }
         }
 
-        /* Líneas desde MoProSoft */
-        .line-1 { top: 380px; left: 380px; width: 120px; transform: rotate(-135deg); }
-        .line-2 { top: 390px; left: 420px; width: 150px; transform: rotate(-160deg); }
-        .line-3 { top: 360px; left: 440px; width: 100px; transform: rotate(150deg); }
-        .line-4 { top: 370px; left: 480px; width: 130px; transform: rotate(170deg); }
+        /* Líneas desde MoProSoft central a sus ideas */
+        .line-1 { top: 430px; left: 420px; width: 180px; transform: rotate(-125deg); transform-origin: 0 50%; }
+        .line-2 { top: 420px; left: 420px; width: 220px; transform: rotate(-145deg); transform-origin: 0 50%; }
+        .line-3 { top: 410px; left: 420px; width: 300px; transform: rotate(-165deg); transform-origin: 0 50%; }
+        .line-4 { top: 400px; left: 420px; width: 350px; transform: rotate(-175deg); transform-origin: 0 50%; }
 
-        /* Líneas desde Calidad */
-        .line-5 { top: 360px; left: 520px; width: 100px; transform: rotate(30deg); }
-        .line-6 { top: 390px; left: 580px; width: 150px; transform: rotate(20deg); }
-        .line-7 { top: 450px; left: 480px; width: 120px; transform: rotate(-45deg); }
-        .line-8 { top: 420px; left: 520px; width: 100px; transform: rotate(-30deg); }
+        /* Líneas desde Calidad central a sus ideas */
+        .line-5 { top: 410px; left: 520px; width: 300px; transform: rotate(-15deg); transform-origin: 0 50%; }
+        .line-6 { top: 420px; left: 520px; width: 350px; transform: rotate(-5deg); transform-origin: 0 50%; }
 
-        /* Líneas de integración */
-        .line-9 { top: 480px; left: 400px; width: 80px; transform: rotate(-90deg); }
-        .line-10 { top: 480px; left: 500px; width: 80px; transform: rotate(-90deg); }
+        /* Líneas a ideas de integración (centro) */
+        .line-7 { top: 470px; left: 420px; width: 150px; transform: rotate(-125deg); transform-origin: 0 50%; }
+        .line-8 { top: 470px; left: 420px; width: 200px; transform: rotate(-90deg); transform-origin: 0 50%; }
+        .line-9 { top: 470px; left: 520px; width: 200px; transform: rotate(-90deg); transform-origin: 0 50%; }
+        .line-10 { top: 470px; left: 520px; width: 150px; transform: rotate(-55deg); transform-origin: 0 50%; }
+
+        /* Líneas a beneficios */
+        .line-11 { top: 520px; left: 420px; width: 200px; transform: rotate(125deg); transform-origin: 0 50%; }
+        .line-12 { top: 520px; left: 420px; width: 250px; transform: rotate(135deg); transform-origin: 0 50%; }
+        .line-13 { top: 520px; left: 520px; width: 250px; transform: rotate(45deg); transform-origin: 0 50%; }
+        .line-14 { top: 520px; left: 520px; width: 200px; transform: rotate(55deg); transform-origin: 0 50%; }
+
+        /* Líneas a implementación */
+        .line-15 { top: 570px; left: 420px; width: 180px; transform: rotate(145deg); transform-origin: 0 50%; }
+        .line-16 { top: 570px; left: 420px; width: 220px; transform: rotate(155deg); transform-origin: 0 50%; }
+        .line-17 { top: 570px; left: 520px; width: 220px; transform: rotate(25deg); transform-origin: 0 50%; }
+        .line-18 { top: 570px; left: 520px; width: 180px; transform: rotate(35deg); transform-origin: 0 50%; }
 
         /* Ideas de conexión */
         .connection-idea {
@@ -339,6 +352,14 @@
         <div class="connection-line line-8"></div>
         <div class="connection-line line-9"></div>
         <div class="connection-line line-10"></div>
+        <div class="connection-line line-11"></div>
+        <div class="connection-line line-12"></div>
+        <div class="connection-line line-13"></div>
+        <div class="connection-line line-14"></div>
+        <div class="connection-line line-15"></div>
+        <div class="connection-line line-16"></div>
+        <div class="connection-line line-17"></div>
+        <div class="connection-line line-18"></div>
 
         <!-- Cluster central -->
         <div class="central-cluster">
@@ -527,22 +548,73 @@
         // Efectos de conexión visual
         function addConnectionEffects() {
             const bubbles = document.querySelectorAll('.idea-bubble');
+            const moprosoftIdeas = document.querySelectorAll('.moprosoft-idea');
+            const calidadIdeas = document.querySelectorAll('.calidad-idea');
+            const integracionIdeas = document.querySelectorAll('.integracion-idea');
             
             bubbles.forEach(bubble => {
-                bubble.addEventListener('mouseenter', () => {
-                    // Resaltar líneas conectoras relacionadas
+                bubble.addEventListener('mouseenter', (e) => {
+                    // Resetear todas las líneas
                     const lines = document.querySelectorAll('.connection-line');
                     lines.forEach(line => {
-                        line.style.background = 'rgba(52, 152, 219, 0.6)';
-                        line.style.height = '3px';
+                        line.style.background = 'rgba(52, 152, 219, 0.2)';
+                        line.style.height = '2px';
                     });
+
+                    // Resaltar líneas según la categoría
+                    if (e.target.classList.contains('moprosoft-idea')) {
+                        // Resaltar líneas 1-4 (MoProSoft)
+                        [1,2,3,4].forEach(i => {
+                            const line = document.querySelector(`.line-${i}`);
+                            if (line) {
+                                line.style.background = 'linear-gradient(90deg, #e74c3c, rgba(231, 76, 60, 0.3))';
+                                line.style.height = '4px';
+                            }
+                        });
+                    } else if (e.target.classList.contains('calidad-idea')) {
+                        // Resaltar líneas 5-6 (Calidad)
+                        [5,6].forEach(i => {
+                            const line = document.querySelector(`.line-${i}`);
+                            if (line) {
+                                line.style.background = 'linear-gradient(90deg, #27ae60, rgba(39, 174, 96, 0.3))';
+                                line.style.height = '4px';
+                            }
+                        });
+                    } else if (e.target.classList.contains('integracion-idea')) {
+                        // Resaltar líneas 7-10 (Integración)
+                        [7,8,9,10].forEach(i => {
+                            const line = document.querySelector(`.line-${i}`);
+                            if (line) {
+                                line.style.background = 'linear-gradient(90deg, #f39c12, rgba(243, 156, 18, 0.3))';
+                                line.style.height = '4px';
+                            }
+                        });
+                    } else if (e.target.classList.contains('beneficios-idea')) {
+                        // Resaltar líneas 11-14 (Beneficios)
+                        [11,12,13,14].forEach(i => {
+                            const line = document.querySelector(`.line-${i}`);
+                            if (line) {
+                                line.style.background = 'linear-gradient(90deg, #9b59b6, rgba(155, 89, 182, 0.3))';
+                                line.style.height = '4px';
+                            }
+                        });
+                    } else if (e.target.classList.contains('implementacion-idea')) {
+                        // Resaltar líneas 15-18 (Implementación)
+                        [15,16,17,18].forEach(i => {
+                            const line = document.querySelector(`.line-${i}`);
+                            if (line) {
+                                line.style.background = 'linear-gradient(90deg, #3498db, rgba(52, 152, 219, 0.3))';
+                                line.style.height = '4px';
+                            }
+                        });
+                    }
                 });
 
                 bubble.addEventListener('mouseleave', () => {
                     const lines = document.querySelectorAll('.connection-line');
                     lines.forEach(line => {
-                        line.style.background = 'rgba(52, 152, 219, 0.3)';
-                        line.style.height = '2px';
+                        line.style.background = 'linear-gradient(90deg, rgba(52, 152, 219, 0.6), rgba(52, 152, 219, 0.2))';
+                        line.style.height = '3px';
                     });
                 });
             });
